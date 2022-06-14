@@ -9,6 +9,7 @@ import HeroDetails from './Components/RQsuperHero.page'
 import Parallelqueries from './Components/ParallelQueries.page'
 import DynamicParallel from './Components/DynamicParallel.page'
 import Dependentquery from './Components/DependentQueries.page'
+import Infinitequery from './Components/InfiniteQueries'
 import Paginated from './Components/PaginatedQueries.page'
 import {QueryClientProvider,QueryClient} from 'react-query'
 import {ReactQueryDevtools} from 'react-query/devtools'
@@ -35,6 +36,7 @@ function App() {
         <Route path='/rq-dynamic-parallel' element={<DynamicParallel heroIds={[1,3]}/>}/>
         <Route exact path="/rq-dependent" element={<Dependentquery email='vishwas@example.com' />} />
         <Route exact path="/" element={<HomePage />} />
+        <Route exact path="/rq-infinite" element={<Infinitequery />} />
         <Route exact path="/rq-paginated" element={<Paginated />} />
         <Route exact path="/rq-parallel" element={<Parallelqueries />} />
         <Route exact path="/super-heroes" element={<SuperHeroesPage />} />
