@@ -1,7 +1,9 @@
 import { useQuery,useMutation,useQueryClient } from "react-query";
-import axios from "axios";
+// import axios from "axios";
+import { request } from "../utils/axios-utils";
 const fetchSuperHeros = () => {
-    return axios.get("http://localhost:4000/superheroes");
+    // return axios.get("http://localhost:4000/superheroes");
+    return request({url:'/superheroes'})
   };
   
 export const useSuperHerosData=(onSuccesshandler,onErrorHandler)=>{
@@ -30,14 +32,65 @@ export const useSuperHerosData=(onSuccesshandler,onErrorHandler)=>{
 }
 
 const addSuperHero=(hero)=>{
-return axios.post('http://localhost:4000/superheroes',hero)
+// return axios.post('http://localhost:4000/superheroes',hero)
+return request({url:'/superheroes',method:'post',data:hero})
 }
+// export const useAddSuperHeroData=()=>{
+//     const queryClient=useQueryClient()
+//     return useMutation(addSuperHero,{
+//         onSuccess:(data)=>{
+//          //   queryClient.invalidateQueries('super-heroes')
+//          queryClient.setQueryData('super-heroes',(oldquerydata)=>{
+//              return {
+//                  ...oldquerydata,
+//                  data:[...oldquerydata.data,data.data],
+//              }
+//          }) // this functon automatically receives oldquerydata as an argument
+//         }
+//     })
+// }
+
+//_________________________________________________________________________________________
+
+//optimistic update or optimized way
+
+//onMutate function :=
+//is called before the mutation function is fired and is passed the same variables the mutation function would receive
+//within the onMutate function the first hig you do is to  cancel the an outgoing refetches,so they dont override our optimistic updates.
+//we need to get hold the current query data before we make any update this will help us in rollback in case mutation fails.
+
+
+
+//onError:=
+// this function is called when mutation encounters an error
 export const useAddSuperHeroData=()=>{
     const queryClient=useQueryClient()
     return useMutation(addSuperHero,{
-        onSuccess:()=>{
+        onMutate: async newHero => {
+            await queryClient.cancelQueries('super-heroes')
+            const previousHeroData = queryClient.getQueryData('super-heroes')
+            queryClient.setQueryData('super-heroes', oldQueryData => {
+              return {
+                ...oldQueryData,
+                data: [
+                  ...oldQueryData.data,
+                  { id: oldQueryData?.data?.length + 1, ...newHero }
+                ]
+              }
+            })
+            return { previousHeroData }
+          },
+          onError: (_err, _newTodo, context) => {  // underscore laga do jo variable use nai ho raha
+            queryClient.setQueryData('super-heroes', context.previousHeroData)
+          },
+          onSettled: () => {
             queryClient.invalidateQueries('super-heroes')
-        }
+          }
+          /**Optimistic Update End */
+
     })
 }
+
+
+
 
