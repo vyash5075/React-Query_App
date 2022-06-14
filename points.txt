@@ -1,0 +1,7 @@
+custom hook:->  use react query hooks on small applications is really a god way,
+but for large apps yopu might to reuse the data fetching logic or code repitition.
+for example= same query might be required ina a different component.
+one approach is to duplicate the copde part but this is not the best way,
+
+what we need is to create a custom query Hook.
+create a custom hook that wraps around usequery hook.
