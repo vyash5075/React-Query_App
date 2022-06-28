@@ -3,7 +3,7 @@
 ## Topics covered
 
 * Fetching Data with useQuery
-* Handling Query Error
+* Handling Querby Error
 * react Query Devtools
 * Query cache
 * Stale Time
