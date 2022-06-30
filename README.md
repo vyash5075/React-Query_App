@@ -1,4 +1,4 @@
-# React-Query_App
+# React-Query_App.
 
 ## Topics covered
 
