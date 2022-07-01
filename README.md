@@ -51,8 +51,7 @@ npm install
 ```bash
 npm start
 ```
-
 ## ⚡ Contributors
 
 - Yash Verma
-
+  
